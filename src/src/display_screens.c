@@ -96,9 +96,9 @@ void sf_currents(byte* pTexts[NR_ROWS]){
     sprintf(pTexts[0] ,"       CURRENT        ");
     sprintf(pTexts[1] ,"      =========       ");   
     sprintf(pTexts[2] ,"                      ");
-    sprintf(pTexts[3] ,"      L1: %u.%u [A]      ", pMessmodul->values.current[0]/100, pMessmodul->values.current[0]%100,);
-    sprintf(pTexts[4] ,"      L2: %u.%u [A]      ", pMessmodul->values.current[1]/100, pMessmodul->values.current[1]%100,);
-    sprintf(pTexts[5] ,"      L3: %u.%u [A]      ", pMessmodul->values.current[2]/100, pMessmodul->values.current[2]%100,);
+    sprintf(pTexts[3] ,"      L1: %u.%02u [A]      ", pMessmodul->values.current[0]/100, pMessmodul->values.current[0]%100,);
+    sprintf(pTexts[4] ,"      L2: %u.%02u [A]      ", pMessmodul->values.current[1]/100, pMessmodul->values.current[1]%100,);
+    sprintf(pTexts[5] ,"      L3: %u.%02u [A]      ", pMessmodul->values.current[2]/100, pMessmodul->values.current[2]%100,);
     sprintf(pTexts[6] ,"                      ");
     sprintf(pTexts[7] ,"                      ");
         

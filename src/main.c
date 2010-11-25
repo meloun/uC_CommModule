@@ -15,7 +15,6 @@ Data Stack size         : 256
 #include <uknos.h>    //110B
 #include <uart2.h>    //124B
 #include <my_spi.h>
-//#include <spi.h>
 #include <messmodules.h>
 #include <digital_outputs.h>
 #include <buttons.h>
@@ -42,9 +41,7 @@ void main(void){
   //spi
   Messmodul_Init();
   Display_Init();        
-    
-  
-  
+        
   DISABLE_INTERRUPT //some Inits can enable interrupt
   
   delay_ms(100);

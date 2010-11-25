@@ -34,6 +34,9 @@
 #include "comm_xport.h"
 #include "comm_xport_frames.h"
 
+void CommXport_SendFrames(void);
+void CommXport_SendFrame(byte command, byte* pData, byte datalength);
+
 
 //LOCAL VARIABLES
 #define RX_BUFFER_SIZE  10
@@ -42,8 +45,11 @@ tFRAME sFrame_Rx;       // receiving frame
 tPROTOCOL sProtocol;    // protocol states 
 tXPORT sXport;          // values received from xport
 
-
-// CommApp_Init - Init IO pins, UART params, protocol variables
+/*******************************************/
+// COMMXPORT_INIT()
+/*******************************************/
+// - Init IO pins, UART params, protocol variables
+/*******************************************/
 void CommXport_Init(void){
     byte i;
 
@@ -72,120 +78,31 @@ void CommXport_Init(void){
     sProtocol.seq = 0;
 }
 
-// CommApp_Handler() - routine for received char from UART.
-// Received char is processed, after last char is received,
-// control "sProtocol.comm_state" is switched to special state allowing
-// processing and executing of command
-void CommXport_Handler(byte data){ 
-    
-	switch(sProtocol.comm_state){
-    
-	    case eWAIT_FOR_STARTBYTE:                // waiting for startbyte
-			if (data == COMM_XPORT_STARTBYTE) {    // start of frame
-				sFrame_Rx.data_cnt = 0;          // init databytes counter                
-				sProtocol.comm_state = eWAIT_FOR_SEQ;  // switch to next state
-// 				LED_7_CHANGE;
-// 				uartSendBufferf(0,"LED_7_CHANGE");
-			}
-			break;
-
-        case eWAIT_FOR_SEQ:                  // awaiting sequence byte
-            sFrame_Rx.seq = data;            // seq
-            sProtocol.comm_state = eWAIT_FOR_CMD;  // switch to nex state
-            break;
-
-		case eWAIT_FOR_CMD:                         // awaiting command byte                                   
-		    sFrame_Rx.command = data;   // command                                   
-			sProtocol.comm_state = eWAIT_FOR_DATALENGTH;  // switch to next state
-			break;
-
-		case eWAIT_FOR_DATALENGTH:  // awaiting datalength byte
-			if(data > COMM_XPORT_DATALENGTH_MAX)        // datalength above data buffer (ERROR)
-				sProtocol.comm_state = eWAIT_FOR_STARTBYTE; // switch to starting state
-			else {      // ok
-				sFrame_Rx.datalength = data;
-                if (data)     // frame contains data
-  				    sProtocol.comm_state = eWAIT_FOR_DATA;        // switch to next state
-                else          // no data, xor is expected
-  				    sProtocol.comm_state = eWAIT_FOR_XOR;			// switch to xor state
-			}
-			break;
-
-		case eWAIT_FOR_DATA:              // awaiting data byte
-			sFrame_Rx.data[sFrame_Rx.data_cnt] = data;  // data byte
-			sFrame_Rx.data_cnt++;                       // saved data cntr increases
-			if (sFrame_Rx.data_cnt >= sFrame_Rx.datalength){ // last data
-				sProtocol.comm_state = eWAIT_FOR_XOR;       // switch to next (xor) state
-			}
-// 			uartSendByte(0,sFrame_Rx.data_cnt);
-// 			LED_2_CHANGE;
-			break;
-
-		case eWAIT_FOR_XOR: // awaiting xor
-            sFrame_Rx.xor = data;               // xor
-            sProtocol.comm_state = eWAIT_FOR_PROCESS; // switch to final state - awating processing
-			break;
-    } // switch end
-}
-
-
-// CommApp_ProcessCommand - command executing and filling
-// Tx Frame with valid data and datalength. Return 1 when
-// gets unknown command, else return 0 (OK).
-byte CommXport_ProcessCommand(void){
-
-	switch(sFrame_Rx.command){
-    
-        // system commands
-        case CMD_SYNC_END:                // Set seq to value 0, any rx frame is new
-            sFrame_Rx.seq = 0;
-            break;
+/*******************************************/
+// COMMXPORT_MANAGER()
+/*******************************************/
+// - periodicly send frames to xport
+// - periodicaly checking receiving buffer for
+//   new frame, if found execute command and send acknowlenge.
+/*******************************************/
+void CommXport_Manager(void){            
         
-        // unknown command
-	    default:
-            return RSP_UNKNOWN_COMMAND;
-		    break;
-	}
-  return RSP_OK;
-}
-
- /* ------------------------------------------------------------
- * | STARTBYTE | SEQ | COMMAND | DATALENGTH | DATA | .. | XOR |
- * ------------------------------------------------------------*/
-void CommXport_SendFrame(byte command, byte* pData, byte datalength){
-    byte i, xor = COMM_XPORT_STARTBYTE;       
-
-    /* CREATING FRAME */
-    
-    //start byte
-    uartAddToTxBuffer(COMM_XPORT_UART_NR, COMM_XPORT_STARTBYTE);      // startbyte added to buffer
-    
-    //sequence
-    uartAddToTxBuffer(COMM_XPORT_UART_NR, ++sProtocol.seq);           // sequence added to buffer
-    xor ^= sProtocol.seq;                                 // seq added to xor
-    
-    //command    
-    uartAddToTxBuffer(COMM_XPORT_UART_NR, command | 0x80); // command added to buffer
-    xor ^= command;                                        // command added to xor           
-    
-    //datalength
-    uartAddToTxBuffer(COMM_XPORT_UART_NR, datalength);           // datalength added to buffer
-    xor ^= datalength;                          // datalength added to xor
-    
-    //data
-    for (i=0; i<datalength; i++) {                  // all databytes
-        uartAddToTxBuffer(COMM_XPORT_UART_NR, *(pData+i));    // data byte added to buffer
-        xor ^= *(pData+i);                             // data byte added to xor
+    if (sProtocol.comm_state == eWAIT_FOR_PROCESS) {     // new frame
+        
+        // Executing received command and new frame creation
+        CommXport_ProcessCommand();   // command executed ok        
     }
     
-    //xor
-    uartAddToTxBuffer(COMM_XPORT_UART_NR, xor);         // xor added to buffer
-
-    // sending frame
-    uartSendTxBuffer(COMM_XPORT_UART_NR);
-    
+    //sending
+    CommXport_SendFrames();          
 }
 
+
+/*******************************************/
+// COMMXPORT_SENDFRAMES()
+/*******************************************/
+// - periodicly send frames to xport
+/*******************************************/
 void CommXport_SendFrames(void){
     static byte send_group = 0;        
     tMESSMODUL *pMessmodul = &sMm[0];
@@ -244,18 +161,134 @@ void CommXport_SendFrames(void){
     
 }
 
-// CommApp_Manager - periodicaly checking receiving buffer for
-// new frame, execute command if found and send acknowlenge.
-void CommXport_Manager(void){            
-        
-    if (sProtocol.comm_state == eWAIT_FOR_PROCESS) {     // new frame
-        
-        // Executing received command and new frame creation
-        CommXport_ProcessCommand();   // command executed ok        
+/*******************************************/
+// COMMXPORT_SENDFRAME()
+/*******************************************/
+// - send frame to xport
+/* ------------------------------------------------------------
+ * | STARTBYTE | SEQ | COMMAND | DATALENGTH | DATA | .. | XOR |
+ * ------------------------------------------------------------*/
+void CommXport_SendFrame(byte command, byte* pData, byte datalength){
+    byte i, xor = COMM_XPORT_STARTBYTE;       
+
+    /* CREATING FRAME */
+    
+    //start byte
+    uartAddToTxBuffer(COMM_XPORT_UART_NR, COMM_XPORT_STARTBYTE);      // startbyte added to buffer
+    
+    //sequence
+    uartAddToTxBuffer(COMM_XPORT_UART_NR, ++sProtocol.seq);           // sequence added to buffer
+    xor ^= sProtocol.seq;                                 // seq added to xor
+    
+    //command    
+    uartAddToTxBuffer(COMM_XPORT_UART_NR, command | 0x80); // command added to buffer
+    xor ^= command;                                        // command added to xor           
+    
+    //datalength
+    uartAddToTxBuffer(COMM_XPORT_UART_NR, datalength);           // datalength added to buffer
+    xor ^= datalength;                          // datalength added to xor
+    
+    //data
+    for (i=0; i<datalength; i++) {                  // all databytes
+        uartAddToTxBuffer(COMM_XPORT_UART_NR, *(pData+i));    // data byte added to buffer
+        xor ^= *(pData+i);                             // data byte added to xor
     }
     
-    //sending
-    CommXport_SendFrames();          
+    //xor
+    uartAddToTxBuffer(COMM_XPORT_UART_NR, xor);         // xor added to buffer
+
+    // sending frame
+    uartSendTxBuffer(COMM_XPORT_UART_NR);
+    
 }
+
+
+/*******************************************/
+// COMMXPORT_HANDLER()
+/*******************************************/
+// - routine for received char from UART.
+// - received frame is processed, after last char is received,
+// - "sProtocol.comm_state" is switched to special state allowing
+//   processing and executing of command
+/*******************************************/
+void CommXport_Handler(byte data){ 
+    
+	switch(sProtocol.comm_state){
+    
+	    case eWAIT_FOR_STARTBYTE:                // waiting for startbyte
+			if (data == COMM_XPORT_STARTBYTE) {    // start of frame
+				sFrame_Rx.data_cnt = 0;          // init databytes counter                
+				sProtocol.comm_state = eWAIT_FOR_SEQ;  // switch to next state
+// 				LED_7_CHANGE;
+// 				uartSendBufferf(0,"LED_7_CHANGE");
+			}
+			break;
+
+        case eWAIT_FOR_SEQ:                  // awaiting sequence byte
+            sFrame_Rx.seq = data;            // seq
+            sProtocol.comm_state = eWAIT_FOR_CMD;  // switch to nex state
+            break;
+
+		case eWAIT_FOR_CMD:                         // awaiting command byte                                   
+		    sFrame_Rx.command = data;   // command                                   
+			sProtocol.comm_state = eWAIT_FOR_DATALENGTH;  // switch to next state
+			break;
+
+		case eWAIT_FOR_DATALENGTH:  // awaiting datalength byte
+			if(data > COMM_XPORT_DATALENGTH_MAX)        // datalength above data buffer (ERROR)
+				sProtocol.comm_state = eWAIT_FOR_STARTBYTE; // switch to starting state
+			else {      // ok
+				sFrame_Rx.datalength = data;
+                if (data)     // frame contains data
+  				    sProtocol.comm_state = eWAIT_FOR_DATA;        // switch to next state
+                else          // no data, xor is expected
+  				    sProtocol.comm_state = eWAIT_FOR_XOR;			// switch to xor state
+			}
+			break;
+
+		case eWAIT_FOR_DATA:              // awaiting data byte
+			sFrame_Rx.data[sFrame_Rx.data_cnt] = data;  // data byte
+			sFrame_Rx.data_cnt++;                       // saved data cntr increases
+			if (sFrame_Rx.data_cnt >= sFrame_Rx.datalength){ // last data
+				sProtocol.comm_state = eWAIT_FOR_XOR;       // switch to next (xor) state
+			}
+// 			uartSendByte(0,sFrame_Rx.data_cnt);
+// 			LED_2_CHANGE;
+			break;
+
+		case eWAIT_FOR_XOR: // awaiting xor
+            sFrame_Rx.xor = data;               // xor
+            sProtocol.comm_state = eWAIT_FOR_PROCESS; // switch to final state - awating processing
+			break;
+    } // switch end
+}
+
+
+
+
+/*******************************************/
+// COMMXPORT_PROCESSCOMMAND()
+/*******************************************/
+// - command executing and filling
+// - Tx Frame with valid data and datalength. Return 1 when
+//   gets unknown command, else return 0 (OK).
+byte CommXport_ProcessCommand(void){
+
+	switch(sFrame_Rx.command){
+    
+        // system commands
+        case CMD_SYNC_END:                // Set seq to value 0, any rx frame is new
+            sFrame_Rx.seq = 0;
+            break;
+        
+        // unknown command
+	    default:
+            return RSP_UNKNOWN_COMMAND;
+		    break;
+	}
+  return RSP_OK;
+}
+
+
 
 
