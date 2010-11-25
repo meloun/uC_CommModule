@@ -1,0 +1,49 @@
+#============
+# DISPLAY
+#============
+
+nt7534.c
+- základní funkce pro práci s displejem
+
+display_screens.c
+ - definice obrazovek zobrazuje na display 
+ 
+display.c
+ - Display_Manager() - bere obrazovky z display_screens.c a zobrazuje je na display
+    
+
+
+#============
+# MESSMODUL
+#============
+
+maxq318x_commands.c
+ - definice commandu
+
+maxq318x.c
+ -  maxq_read()  - ètení z MAXe
+ -  maxq_write() - zápis do MAXe  
+
+messmodul.c
+ - Messmodul_Manager() - pomocí maxq_read(), maxq_write() zapisuje a ète konkrétní hodnoty z/do struktury sMm[i].values
+ 
+
+#============
+# XPORT
+#============  
+
+CommXport_Manager.c
+ - CommXport_Manager() - pomocí CommXport_SendFrames() vysílá konkrétní hodnoty XPORTu (nejèastìji hodnoty z MAXe => struktura sMm[i].values)
+
+
+
+R_ADCRATE 0x13F(default)
+=>40us/slot(8 MHz), 8 slots (IA,VA,IB,VB,IC,VC,IN,Temp)=>320us
+
+3125 samples/second
+
+
+toDo:
+Messmodul, maxqXX, spi - definovani portu!!!!! 
+
+
