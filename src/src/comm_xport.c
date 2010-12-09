@@ -137,9 +137,9 @@ void CommXport_SendFrames(void){
             break;
         case ePOWERS:
             //POWERs    
-            CommXport_SendFrame( CMD_MM_GET_POWER_1,  (byte*)&pMessmodul->values.power[0],  2);  //POWER 1
-            CommXport_SendFrame( CMD_MM_GET_POWER_2,  (byte*)&pMessmodul->values.power[1],  2);  //POWER 2
-            CommXport_SendFrame( CMD_MM_GET_POWER_3,  (byte*)&pMessmodul->values.power[2],  2);  //POWER 3
+            CommXport_SendFrame( CMD_MM_GET_POWER_1,  (byte*)&pMessmodul->values.power_act[0],  2);  //POWER 1
+            CommXport_SendFrame( CMD_MM_GET_POWER_2,  (byte*)&pMessmodul->values.power_act[1],  2);  //POWER 2
+            CommXport_SendFrame( CMD_MM_GET_POWER_3,  (byte*)&pMessmodul->values.power_act[2],  2);  //POWER 3
             break; 
         case eENERGIES:
             //ENERGIES    

@@ -25,6 +25,8 @@ void sf_resume(byte* pTexts[NR_ROWS]);
 void sf_voltages(byte* pTexts[NR_ROWS]);
 void sf_currents(byte* pTexts[NR_ROWS]);
 void sf_powers(byte* pTexts[NR_ROWS]);
+void sf_powers_act(byte* pTexts[NR_ROWS]);
+//void sf_powers_app(byte* pTexts[NR_ROWS]);
 void sf_energies(byte* pTexts[NR_ROWS]);
 void sf_vrms(byte* pTexts[NR_ROWS]);
 void sf_irms(byte* pTexts[NR_ROWS]);
@@ -38,7 +40,7 @@ flash tSCREEN sSCREEN_GROUP[NR_SCREEN] = {
     {"VOLTAGE", sf_voltages},
     {"CURRENT", sf_currents},
 //    {"ACT", sf_act}, 
-    {"POWER", sf_powers}                                   
+    {"POWER", sf_powers_act}                                   
 };
 
 //
@@ -104,23 +106,48 @@ void sf_currents(byte* pTexts[NR_ROWS]){
         
 }
 
-//POWER
+
+
+
+/*******************************************/
+// POWER
+/*******************************************/
+
+//active & apparent power
 void sf_powers(byte* pTexts[NR_ROWS]){    
+    
+    tMESSMODUL *pMessmodul = &sMm[0];
+    byte i;    
+    
+    sprintf(pTexts[0] ,"       POWER          ");
+    sprintf(pTexts[1] ,"      =========       ");  
+    sprintf(pTexts[2] ,"                      ");
+    
+    for(i=0; i<3;i++) 
+        sprintf(pTexts[i+3] ," L1: %ld.%d [W] | %ld.%d [VA]", pMessmodul->values.power_act[i]/10, abs(pMessmodul->values.power_act[i]%10), pMessmodul->values.power_app[i]/10, abs(pMessmodul->values.power_app[i]%10));
+    //sprintf(pTexts[4] ," L2: %ld.%d [W] | %ld.%d [VA]", pMessmodul->values.power_act[1]/10, abs(pMessmodul->values.power_act[1]%10), pMessmodul->values.power_app[0]/10, abs(pMessmodul->values.power_app[0]%10));
+    //sprintf(pTexts[5] ," L3: %ld.%d [W] | %ld.%d [VA]", pMessmodul->values.power_act[2]/10, abs(pMessmodul->values.power_act[0]%10), pMessmodul->values.power_app[0]/10, abs(pMessmodul->values.power_app[0]%10));
+    sprintf(pTexts[6] ,"                      ");
+    sprintf(pTexts[7] ,"                      ");
+}
+
+//active power
+void sf_powers_act(byte* pTexts[NR_ROWS]){    
     
     tMESSMODUL *pMessmodul = &sMm[0];    
     
-    sprintf(pTexts[0] ,"        POWER         ");
+    sprintf(pTexts[0] ,"     ACTIVE POWER     ");
     sprintf(pTexts[1] ,"      =========       ");  
     sprintf(pTexts[2] ,"                      ");
-    sprintf(pTexts[3] ,"      L1: %ld.%d [W]   ", pMessmodul->values.power[0]/10, abs(pMessmodul->values.power[0]%10));
-    sprintf(pTexts[4] ,"      L2: %ld.%d [W]   ", pMessmodul->values.power[1]/10, abs(pMessmodul->values.power[1]%10));
-    sprintf(pTexts[5] ,"      L3: %ld.%d [W]   ", pMessmodul->values.power[2]/10, abs(pMessmodul->values.power[0]%10));
+    sprintf(pTexts[3] ,"      L1: %ld.%d [W]   ", pMessmodul->values.power_act[0]/10, abs(pMessmodul->values.power_act[0]%10));
+    sprintf(pTexts[4] ,"      L2: %ld.%d [W]   ", pMessmodul->values.power_act[1]/10, abs(pMessmodul->values.power_act[1]%10));
+    sprintf(pTexts[5] ,"      L3: %ld.%d [W]   ", pMessmodul->values.power_act[2]/10, abs(pMessmodul->values.power_act[0]%10));
     sprintf(pTexts[6] ,"                      ");
     sprintf(pTexts[7] ,"                      ");
         
 }
 
-//POWER
+//apparent power
 void sf_energies(byte* pTexts[NR_ROWS]){    
     
     tMESSMODUL *pMessmodul = &sMm[0];    

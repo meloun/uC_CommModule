@@ -1,27 +1,27 @@
 RAM Allocation
 Variable                                                          Address   Size
 --------------------------------------------------------------------------------
-sMm                                                               03B8h      221
-sXport                                                            0495h       10
-uartReadyTx                                                       049Fh        2
-uartBufferedTx                                                    04A1h        2
-uartTxBuffer                                                      04A3h       16
-uartRxOverflow                                                    04B3h        4
-uart0TxData                                                       04B7h       48
-uart1TxData                                                       04E7h       48
-UartRxFunc                                                        0517h        4
-sKernel                                                           051Bh        2
-sProcess                                                          051Dh      110
-aux_flag                                                          058Bh        1
-aux_top_first                                                     058Ch        1
-aux_bottom_first                                                  058Dh        1
-uartRxBuffer                                                      058Eh       10
-comm_terminal_state                                               0598h        1
-sFrame_Rx                                                         0599h       37
-sProtocol                                                         05BEh        2
-send_group                                                        05C0h        1
-sDisplay                                                          05C1h        4
-_seed                                                             05C5h        4
+sMm                                                               03B8h      265
+sXport                                                            04C1h       10
+uartReadyTx                                                       04CBh        2
+uartBufferedTx                                                    04CDh        2
+uartTxBuffer                                                      04CFh       16
+uartRxOverflow                                                    04DFh        4
+uart0TxData                                                       04E3h       48
+uart1TxData                                                       0513h       48
+UartRxFunc                                                        0543h        4
+sKernel                                                           0547h        2
+sProcess                                                          0549h      110
+aux_flag                                                          05B7h        1
+aux_top_first                                                     05B8h        1
+aux_bottom_first                                                  05B9h        1
+uartRxBuffer                                                      05BAh       10
+comm_terminal_state                                               05C4h        1
+sFrame_Rx                                                         05C5h       37
+sProtocol                                                         05EAh        2
+send_group                                                        05ECh        1
+sDisplay                                                          05EDh        4
+_seed                                                             05F1h        4
 
 EEPROM Allocation
 Variable                                                          Address   Size
