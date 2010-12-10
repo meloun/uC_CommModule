@@ -143,15 +143,15 @@ void CommXport_SendFrames(void){
             break; 
         case eENERGIES:
             //ENERGIES    
-            CommXport_SendFrame( CMD_MM_GET_ENERGY_1,  (byte*)&pMessmodul->values.energy[0],  2);  //ENERGY 1
-            CommXport_SendFrame( CMD_MM_GET_ENERGY_2,  (byte*)&pMessmodul->values.energy[1],  2);  //ENERGY 2
-            CommXport_SendFrame( CMD_MM_GET_ENERGY_3,  (byte*)&pMessmodul->values.energy[2],  2);  //ENERGY 3
+            CommXport_SendFrame( CMD_MM_GET_ENERGY_1,  (byte*)&pMessmodul->values.energy_act[0],  2);  //ENERGY 1
+            CommXport_SendFrame( CMD_MM_GET_ENERGY_2,  (byte*)&pMessmodul->values.energy_act[1],  2);  //ENERGY 2
+            CommXport_SendFrame( CMD_MM_GET_ENERGY_3,  (byte*)&pMessmodul->values.energy_act[2],  2);  //ENERGY 3
             break;
         case ePFS:
             //POWER FACTOR    
-            CommXport_SendFrame( CMD_MM_GET_PF_1,  (byte*)&pMessmodul->values.pf[0],  2);  //PF 1
-            CommXport_SendFrame( CMD_MM_GET_PF_2,  (byte*)&pMessmodul->values.pf[1],  2);  //PF 2
-            CommXport_SendFrame( CMD_MM_GET_PF_3,  (byte*)&pMessmodul->values.pf[2],  2);  //PF 3
+            CommXport_SendFrame( CMD_MM_GET_PF_1,  (byte*)&pMessmodul->values.power_factor[0],  2);  //PF 1
+            CommXport_SendFrame( CMD_MM_GET_PF_2,  (byte*)&pMessmodul->values.power_factor[1],  2);  //PF 2
+            CommXport_SendFrame( CMD_MM_GET_PF_3,  (byte*)&pMessmodul->values.power_factor[2],  2);  //PF 3
             send_group = eIO;  
             break;
     }                            

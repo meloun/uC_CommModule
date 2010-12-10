@@ -56,7 +56,7 @@ void main(void){
   // - period in miliseconds, shortest period is 10ms
   //******************************************
   
-  Create_Process( 3000, CommXport_Manager);   //zpracovava buffer naplneny v preruseni
+  //Create_Process( 3000, CommXport_Manager);   //zpracovava buffer naplneny v preruseni
   Create_Process( 3000,  Messmodul_Manager);    //read and save data from MAXIM     
   Create_Process(  200, Test_process_buttons);//vypisuje jake tlacitko bylo zmacknuto 
   Create_Process( 1000, Test_process_leds);     //blika led   
@@ -77,13 +77,14 @@ void main(void){
   uKnos_Start(); //enable interrupt
   uartSendBufferf(0,"\nI: System start..");             
         
-while (1){ 
-    //printf(".");
-    //delay_ms(100);            
-    Messmodul_Rest();  //vypisy 
+while (1){
+ 
+    //printf(".");     
+    Messmodul_Rest();  //vypisy
+     
+} //end of while
+} //end of main
 
-}
-}
 void getR(){
     byte aux_data;
     aux_data = SPI_MasterTransmit(0x38);    

@@ -39,38 +39,57 @@ flash tSCREEN sSCREEN_GROUP[NR_SCREEN] = {
     {"RESUME", sf_resume},
     {"VOLTAGE", sf_voltages},
     {"CURRENT", sf_currents},
-//    {"ACT", sf_act}, 
     {"POWER", sf_powers_act}                                   
 };
 
 //
-void sf_board(byte* pTexts[NR_ROWS]){
-              
-    tMESSMODUL *pMessmodul = &sMm[0];        
+void sf_board(byte* pTexts[NR_ROWS]){                         
+    byte aux_string[40];    
     
-    sprintf(pTexts[0] ,"      RMII BOARD     ");
-    sprintf(pTexts[1] ,"     ============    ");      
-    sprintf(pTexts[2] ," HW ver.: "); strcatf(pTexts[2], HW_VERSION_S); strcatf(pTexts[2], "     ");
-    sprintf(pTexts[3] ," SW ver.: "); strcatf(pTexts[3], SW_VERSION_S); strcatf(pTexts[3], "     ");  
-    sprintf(pTexts[4] ,"                          ");                  
-    sprintf(pTexts[5] ," IP: %u.%u.%u.%u           ", sXport.ip_address[0], sXport.ip_address[1], sXport.ip_address[2], sXport.ip_address[3]);
-    sprintf(pTexts[6] ," MAC: %02X%02X%02X%02X%02X%02X   ", sXport.mac_address[0], sXport.mac_address[1], sXport.mac_address[2], sXport.mac_address[3], sXport.mac_address[4], sXport.mac_address[5]);
-    sprintf(pTexts[7] ,"                          ");             
+    strncpy(pTexts[0] ,"      RMII BOARD     ", NR_COLUMNS);
+    strncpy(pTexts[1] ,"     ============    ", NR_COLUMNS);
+          
+    strcpy(aux_string , " HW ver.: "); strcatf(aux_string, HW_VERSION_S); strcatf(aux_string, "    ");
+    strncpy(pTexts[2], aux_string, NR_COLUMNS); 
+                       
+    strcpy(aux_string , " SW ver.: "); strcatf(aux_string, SW_VERSION_S); strcatf(aux_string, "    ");
+    strncpy(pTexts[3], aux_string, NR_COLUMNS);
+               
+    strncpy(pTexts[4], "                     ", NR_COLUMNS);     
+                  
+    sprintf(aux_string ," IP: %03u.%03u.%03u.%03u ", sXport.ip_address[0], sXport.ip_address[1], sXport.ip_address[2], sXport.ip_address[3]);
+    strncpy(pTexts[5], aux_string, NR_COLUMNS);    
+    
+    sprintf(aux_string ," MAC: %02X%02X%02X%02X%02X%02X   ", sXport.mac_address[0], sXport.mac_address[1], sXport.mac_address[2], sXport.mac_address[3], sXport.mac_address[4], sXport.mac_address[5]);
+    strncpy(pTexts[6], aux_string, NR_COLUMNS); 
+    
+    strncpy(pTexts[7] , "                     ", NR_COLUMNS);             
 }
 
 //
 void sf_resume(byte* pTexts[NR_ROWS]){
-              
+    
+    byte aux_string[40];               
     tMESSMODUL *pMessmodul = &sMm[0];        
     
-    sprintf(pTexts[0] ,"       RESUME    ");
-    sprintf(pTexts[1] ,"     ============    ");      
-    sprintf(pTexts[2] ," U lines: %u         ", Messmodul_getCountVoltage());
-    sprintf(pTexts[3] ," I lines: %u         ", Messmodul_getCountCurrent());                                              
-    sprintf(pTexts[4] ,"                          ");
-    sprintf(pTexts[5] ," Frequence: %u.%u Hz      ", pMessmodul->values.frequence/1000, pMessmodul->values.frequence%1000);                                
-    sprintf(pTexts[6] ," Temperature: %u.%u°C      ", pMessmodul->values.temperature/10,pMessmodul->values.temperature%10);
-    sprintf(pTexts[7] ,"                          ");
+    strncpy(pTexts[0] ,"       RESUME    ", NR_COLUMNS);    
+    strncpy(pTexts[1] ,"     ============    ", NR_COLUMNS);        
+    
+    sprintf(aux_string ," U lines: %u         ", Messmodul_getCountVoltage());
+    strncpy(pTexts[2], aux_string, NR_COLUMNS);
+            
+    sprintf(aux_string ," I lines: %u         ", Messmodul_getCountCurrent());
+    strncpy(pTexts[3], aux_string, NR_COLUMNS);        
+                                                  
+    strncpy(pTexts[4] ,"                          ", NR_COLUMNS);
+    
+    sprintf(aux_string ," Frequence: %u.%u Hz      ", pMessmodul->values.frequence/1000, pMessmodul->values.frequence%1000);
+    strncpy(pTexts[5], aux_string, NR_COLUMNS);
+                                    
+    sprintf(aux_string ," Temperature: %u.%u°C      ", pMessmodul->values.temperature/10,pMessmodul->values.temperature%10);
+    strncpy(pTexts[6], aux_string, NR_COLUMNS);
+    
+    strncpy(pTexts[7] ,"                          ", NR_COLUMNS);
         
 }
 
@@ -117,7 +136,7 @@ void sf_currents(byte* pTexts[NR_ROWS]){
 void sf_powers(byte* pTexts[NR_ROWS]){    
     
     tMESSMODUL *pMessmodul = &sMm[0];
-    byte i;    
+    word i;    
     
     sprintf(pTexts[0] ,"       POWER          ");
     sprintf(pTexts[1] ,"      =========       ");  
@@ -147,17 +166,17 @@ void sf_powers_act(byte* pTexts[NR_ROWS]){
         
 }
 
-//apparent power
+//ACTIVE POWER
 void sf_energies(byte* pTexts[NR_ROWS]){    
     
     tMESSMODUL *pMessmodul = &sMm[0];    
     
-    sprintf(pTexts[0] ,"        ENERGY        ");
+    sprintf(pTexts[0] ,"    ACTIVE ENERGY     ");
     sprintf(pTexts[1] ,"      =========       ");  
     sprintf(pTexts[2] ,"                      ");
-    sprintf(pTexts[3] ,"      L1: %u [Wh]     ", pMessmodul->values.energy[0]);
-    sprintf(pTexts[4] ,"      L2: %u [Wh]     ", pMessmodul->values.energy[1]);
-    sprintf(pTexts[5] ,"      L3: %u [Wh]     ", pMessmodul->values.energy[2]);
+    sprintf(pTexts[3] ,"      L1: %u [Wh]     ", pMessmodul->values.energy_act[0]);
+    sprintf(pTexts[4] ,"      L2: %u [Wh]     ", pMessmodul->values.energy_act[1]);
+    sprintf(pTexts[5] ,"      L3: %u [Wh]     ", pMessmodul->values.energy_act[2]);
     sprintf(pTexts[6] ,"                      ");
     sprintf(pTexts[7] ,"                      ");
         
@@ -171,9 +190,9 @@ void sf_powerfactors(byte* pTexts[NR_ROWS]){
     sprintf(pTexts[0] ,"       POWER FACTOR   ");
     sprintf(pTexts[1] ,"      ==============  ");  
     sprintf(pTexts[2] ,"                      ");
-    sprintf(pTexts[3] ,"      L1: %u [Wh]     ", pMessmodul->values.pf[0]);
-    sprintf(pTexts[4] ,"      L2: %u [Wh]     ", pMessmodul->values.pf[1]);
-    sprintf(pTexts[5] ,"      L3: %u [Wh]     ", pMessmodul->values.pf[2]);
+    sprintf(pTexts[3] ,"      L1: %u [Wh]     ", pMessmodul->values.power_factor[0]);
+    sprintf(pTexts[4] ,"      L2: %u [Wh]     ", pMessmodul->values.power_factor[1]);
+    sprintf(pTexts[5] ,"      L3: %u [Wh]     ", pMessmodul->values.power_factor[2]);
     sprintf(pTexts[6] ,"                      ");
     sprintf(pTexts[7] ,"                      ");
         
@@ -182,7 +201,7 @@ void sf_powerfactors(byte* pTexts[NR_ROWS]){
 /*************/
 /* REGISTERS */
 /*************/
-
+/*
 void sf_vrms(byte* pTexts[NR_ROWS]){
     
     tMESSMODUL *pMessmodul = &sMm[0];    
@@ -196,8 +215,9 @@ void sf_vrms(byte* pTexts[NR_ROWS]){
     sprintf(pTexts[6] ,"                      ");
     sprintf(pTexts[7] ,"                      ");
         
-}
+}*/
 
+/*
 void sf_irms(byte* pTexts[NR_ROWS]){
     
     tMESSMODUL *pMessmodul = &sMm[0];    
@@ -211,8 +231,8 @@ void sf_irms(byte* pTexts[NR_ROWS]){
     sprintf(pTexts[6] ,"                      ");
     sprintf(pTexts[7] ,"                      ");
         
-}
-
+}*/
+/*
 void sf_act(byte* pTexts[NR_ROWS]){
     
     tMESSMODUL *pMessmodul = &sMm[0];    
@@ -241,9 +261,10 @@ void sf_app(byte* pTexts[NR_ROWS]){
     sprintf(pTexts[6] ,"                      ");
     sprintf(pTexts[7] ,"                      ");
         
-}
+} */
 
 /* ENERGY */
+/*
 void sf_eapos_eaneg(byte* pTexts[NR_ROWS]){
     
     tMESSMODUL *pMessmodul = &sMm[0];    
@@ -257,4 +278,4 @@ void sf_eapos_eaneg(byte* pTexts[NR_ROWS]){
     sprintf(pTexts[6] ,"                      ");
     sprintf(pTexts[7] ,"                      ");
         
-}
+}*/
