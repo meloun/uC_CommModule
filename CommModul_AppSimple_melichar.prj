@@ -6,7 +6,7 @@ A=Freeware, for evaluation and non-commercial use only
 C=
 D=26.07.2010 14:00:02
 Files=18
-OpenedFiles=2
+OpenedFiles=0
 OF1=src\src\display_screens.h
 Active1=1
 OutputListFilesDirectory=List
@@ -17,7 +17,7 @@ AllowDisplayFunctionCallTree=1
 CleanUp=2
 EditorPanelMode=0
 ActiveEditorPanel=0
-Active0=0
+Active0=1
 EditorPanel0=0
 PageIndex0=0
 EditorPanel1=0
@@ -193,7 +193,7 @@ WarningUnknownPragma=1
 LinkerWarnings=1
 DebugBootLoader=0
 WatchAVR8LAutoVariables=0
-Build=1742
+Build=1772
 UseEEPROMLocation0=1
 ExternalInterruptVectors=0
 IncludePath0=D:\_work\uC\Libc
@@ -494,7 +494,7 @@ Row=3
 Column=0
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1032488482
+TimeStamp=1032488593
 [Bookmarks3]
 TimeStamp=1016487375
 Row=5
@@ -2340,11 +2340,11 @@ BK9=-1
 [FoldedCode78]
 Blocks=0
 [Bookmarks108]
-TimeStamp=1032488105
-Row=63
-Column=0
+TimeStamp=1032672956
+Row=66
+Column=6
 ScrollPosX=0
-ScrollPosY=42
+ScrollPosY=101
 BK0=-1
 BK1=-1
 BK2=-1
@@ -2499,8 +2499,6 @@ Blocks=0
 Blocks=0
 [FoldedCode114]
 Blocks=0
-[FoldedCode108]
-Blocks=0
 [FoldedCode62]
 Blocks=0
 [FoldedCode67]
@@ -2508,6 +2506,12 @@ Blocks=0
 [FoldedCode91]
 Blocks=0
 [FoldedCode109]
+Blocks=0
+[FoldedCode105]
+Blocks=0
+[FoldedCode106]
+Blocks=0
+[FoldedCode108]
 Blocks=0
 [HeadersList]
 Files=18
@@ -2787,7 +2791,3 @@ F15=..\Libc\messmodules.h
 F16=..\Libc\maxq318x.h
 F17=..\Libc\maxq318x_commands.h
 F18=src\src\comm_xport.h
-[FoldedCode106]
-Blocks=0
-[FoldedCode105]
-Blocks=0

@@ -10,12 +10,12 @@
 #include <display.h>
 #include <NT7534.h>
 
-#define NR_SCREEN   5
+#define NR_SCREEN   7
 
 #define TITLE_SIZE  15
 
 
-typedef void ( *pDISPLAY_SCREEN_FUNCTION ) (byte *pTexts[NR_ROWS]);
+typedef byte ( *pDISPLAY_SCREEN_FUNCTION ) (byte *pTexts[NR_ROWS]);
 
 typedef struct{
     char title[TITLE_SIZE];    
@@ -26,5 +26,7 @@ typedef struct{
 
 //obsahuje jednotlive screeny
 extern flash tSCREEN sSCREEN_GROUP[NR_SCREEN];
+
+void Display_screens_setStrings(byte index, byte* pTexts[NR_ROWS]);
 
 #endif /* DISPLAY_SCREENS_H_ */
