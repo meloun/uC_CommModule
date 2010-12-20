@@ -105,7 +105,7 @@ void CommXport_Manager(void){
 /*******************************************/
 void CommXport_SendFrames(void){
     static byte send_group = 0;        
-    tMESSMODUL *pMessmodul = &sMm[0];
+    tMESSMODULE *pMessmodule = &sMm.sModule[0];
     byte aux_data;                                      
         
     
@@ -120,38 +120,38 @@ void CommXport_SendFrames(void){
             break;
         case e1F:
             //1F values    
-            CommXport_SendFrame( CMD_MM_GET_FREQUENCY,   (byte*)&pMessmodul->values.frequence,   2);  //FREQUENCE                
-            CommXport_SendFrame( CMD_MM_GET_TEMPERATURE, (byte*)&pMessmodul->values.temperature, 2);  //RAWTEMP
+            CommXport_SendFrame( CMD_MM_GET_FREQUENCY,   (byte*)&pMessmodule->values.frequence,   2);  //FREQUENCE                
+            CommXport_SendFrame( CMD_MM_GET_TEMPERATURE, (byte*)&pMessmodule->values.temperature, 2);  //RAWTEMP
             break;
         case eVOLTAGES:
             //VOLTAGEs
-            CommXport_SendFrame( CMD_MM_GET_VOLTAGE_1,  (byte*)&pMessmodul->values.voltage[0],  2);  //VOLTAGE 1
-            CommXport_SendFrame( CMD_MM_GET_VOLTAGE_2,  (byte*)&pMessmodul->values.voltage[1],  2);  //VOLTAGE 2
-            CommXport_SendFrame( CMD_MM_GET_VOLTAGE_3,  (byte*)&pMessmodul->values.voltage[2],  2);  //VOLTAGE 3
+            CommXport_SendFrame( CMD_MM_GET_VOLTAGE_1,  (byte*)&pMessmodule->values.voltage[0],  2);  //VOLTAGE 1
+            CommXport_SendFrame( CMD_MM_GET_VOLTAGE_2,  (byte*)&pMessmodule->values.voltage[1],  2);  //VOLTAGE 2
+            CommXport_SendFrame( CMD_MM_GET_VOLTAGE_3,  (byte*)&pMessmodule->values.voltage[2],  2);  //VOLTAGE 3
             break;
         case eCURRENTS:
             //CURRENTs    
-            CommXport_SendFrame( CMD_MM_GET_CURRENT_1,  (byte*)&pMessmodul->values.current[0],  2);  //CURRENT 1
-            CommXport_SendFrame( CMD_MM_GET_CURRENT_2,  (byte*)&pMessmodul->values.current[1],  2);  //CURRENT 2
-            CommXport_SendFrame( CMD_MM_GET_CURRENT_3,  (byte*)&pMessmodul->values.current[2],  2);  //CURRENT 3
+            CommXport_SendFrame( CMD_MM_GET_CURRENT_1,  (byte*)&pMessmodule->values.current[0],  2);  //CURRENT 1
+            CommXport_SendFrame( CMD_MM_GET_CURRENT_2,  (byte*)&pMessmodule->values.current[1],  2);  //CURRENT 2
+            CommXport_SendFrame( CMD_MM_GET_CURRENT_3,  (byte*)&pMessmodule->values.current[2],  2);  //CURRENT 3
             break;
         case ePOWERS:
             //POWERs    
-            CommXport_SendFrame( CMD_MM_GET_POWER_1,  (byte*)&pMessmodul->values.power_act[0],  2);  //POWER 1
-            CommXport_SendFrame( CMD_MM_GET_POWER_2,  (byte*)&pMessmodul->values.power_act[1],  2);  //POWER 2
-            CommXport_SendFrame( CMD_MM_GET_POWER_3,  (byte*)&pMessmodul->values.power_act[2],  2);  //POWER 3
+            CommXport_SendFrame( CMD_MM_GET_POWER_1,  (byte*)&pMessmodule->values.power_act[0],  2);  //POWER 1
+            CommXport_SendFrame( CMD_MM_GET_POWER_2,  (byte*)&pMessmodule->values.power_act[1],  2);  //POWER 2
+            CommXport_SendFrame( CMD_MM_GET_POWER_3,  (byte*)&pMessmodule->values.power_act[2],  2);  //POWER 3
             break; 
         case eENERGIES:
             //ENERGIES    
-            CommXport_SendFrame( CMD_MM_GET_ENERGY_1,  (byte*)&pMessmodul->values.energy_act[0],  2);  //ENERGY 1
-            CommXport_SendFrame( CMD_MM_GET_ENERGY_2,  (byte*)&pMessmodul->values.energy_act[1],  2);  //ENERGY 2
-            CommXport_SendFrame( CMD_MM_GET_ENERGY_3,  (byte*)&pMessmodul->values.energy_act[2],  2);  //ENERGY 3
+            CommXport_SendFrame( CMD_MM_GET_ENERGY_1,  (byte*)&pMessmodule->values.energy_act[0],  2);  //ENERGY 1
+            CommXport_SendFrame( CMD_MM_GET_ENERGY_2,  (byte*)&pMessmodule->values.energy_act[1],  2);  //ENERGY 2
+            CommXport_SendFrame( CMD_MM_GET_ENERGY_3,  (byte*)&pMessmodule->values.energy_act[2],  2);  //ENERGY 3
             break;
         case ePFS:
             //POWER FACTOR    
-            CommXport_SendFrame( CMD_MM_GET_PF_1,  (byte*)&pMessmodul->values.power_factor[0],  2);  //PF 1
-            CommXport_SendFrame( CMD_MM_GET_PF_2,  (byte*)&pMessmodul->values.power_factor[1],  2);  //PF 2
-            CommXport_SendFrame( CMD_MM_GET_PF_3,  (byte*)&pMessmodul->values.power_factor[2],  2);  //PF 3
+            CommXport_SendFrame( CMD_MM_GET_PF_1,  (byte*)&pMessmodule->values.power_factor[0],  2);  //PF 1
+            CommXport_SendFrame( CMD_MM_GET_PF_2,  (byte*)&pMessmodule->values.power_factor[1],  2);  //PF 2
+            CommXport_SendFrame( CMD_MM_GET_PF_3,  (byte*)&pMessmodule->values.power_factor[2],  2);  //PF 3
             send_group = eIO;  
             break;
     }                            

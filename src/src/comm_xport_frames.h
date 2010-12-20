@@ -19,7 +19,7 @@ typedef struct{
 flash tXPORT_FRAMES_DEF XPORT_FRAMES_DEF[] = {
 
 //  |command                |size   |pData
-    {CMD_MM_GET_FREQUENCY,      2,      (byte *)&sMm[0].values.frequence   },
+    {CMD_MM_GET_FREQUENCY,      2,      (byte *)&sMm.sModule[0].values.frequence   },
     {CMD_MM_GET_TEMPERATURE,    2,      0   }
 };
 

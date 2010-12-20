@@ -37,8 +37,8 @@ void Test_process_buttons(){
         if(aux_top_first){ //prave ted zmacknuto?            
             //uartSendBufferf(0,"\nI: Tlacitko TOP  bylo zmacknuto..");
             
-            printf("\n-");
-            Disp_previous_screen();   
+            //printf("\n-");
+            //Disp_previous_screen();   
             aux_top_first = 0;
         }        
     }
@@ -50,8 +50,8 @@ void Test_process_buttons(){
         if(aux_bottom_first){ 
             //uartSendBufferf(0,"\nI: Tlacitko BOTTOM bylo zmacknuto..");  
             
-            printf("\n+");                        
-            Disp_next_screen();
+            //printf("\n+");                        
+            //Disp_next_screen();
             aux_bottom_first = 0;
         }
     }

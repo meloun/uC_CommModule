@@ -20,6 +20,7 @@ Data Stack size         : 256
 #include <buttons.h>
 #include <NT7534.h>
 #include "display.h"
+#include "buttons_manager.h"
 #include "test_process.h"
 #include "comm_terminal.h"
 #include "comm_xport.h"
@@ -57,8 +58,12 @@ void main(void){
   //******************************************
   
   //Create_Process( 3000, CommXport_Manager);   //zpracovava buffer naplneny v preruseni
-  Create_Process( 3000,  Messmodul_Manager);    //read and save data from MAXIM     
-  Create_Process(  200, Test_process_buttons);//vypisuje jake tlacitko bylo zmacknuto 
+  Create_Process( 250,  Messmodul_Manager);    //read and save data from MAXIM     
+  Create_Process(  200, Test_process_buttons);//vypisuje jake tlacitko bylo zmacknuto
+  
+  Create_Process(  30, Buttons_manager);
+  
+   
   Create_Process( 1000, Test_process_leds);     //blika led   
   Create_Process( 500, Display_Manager);       //obsluha dipleje
   
