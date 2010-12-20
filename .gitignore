@@ -1,0 +1,11 @@
+Obj
+Linker
+*.hci
+*.cci
+*.c~
+*.h~
+*.prj~
+*.cbi
+*.fct
+*.lst
+
