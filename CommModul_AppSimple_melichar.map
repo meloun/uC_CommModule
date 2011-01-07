@@ -1,30 +1,29 @@
 RAM Allocation
 Variable                                                          Address   Size
 --------------------------------------------------------------------------------
-sMm                                                               04E9h      407
-sScreen_data                                                      0680h        1
-sXport                                                            0681h       10
-uartReadyTx                                                       068Bh        2
-uartBufferedTx                                                    068Dh        2
-uartTxBuffer                                                      068Fh       16
-uartRxOverflow                                                    069Fh        4
-uart0TxData                                                       06A3h       48
-uart1TxData                                                       06D3h       48
-UartRxFunc                                                        0703h        4
-sKernel                                                           0707h        2
-sProcess                                                          0709h      110
-aux_flag                                                          0777h        1
-aux_top_first                                                     0778h        1
-aux_bottom_first                                                  0779h        1
-uartRxBuffer                                                      077Ah       10
-comm_terminal_state                                               0784h        1
-sFrame_Rx                                                         0785h       37
-sProtocol                                                         07AAh        2
-sDisplay                                                          07ACh        4
-cnt_pressed_1_S0120001000                                         07B0h        1
-cnt_pressed_2_S0120001000                                         07B1h        1
-flag_long_pressed_S0120001000                                     07B2h        1
-_seed                                                             07B3h        4
+sMm                                                               03B8h      855
+sScreen_data                                                      070Fh        1
+sXport                                                            0710h       10
+sKernel                                                           071Ah        2
+sProcess                                                          071Ch      110
+uartReadyTx                                                       078Ah        2
+uartBufferedTx                                                    078Ch        2
+uartTxBuffer                                                      078Eh       16
+uartRxOverflow                                                    079Eh        4
+uart0TxData                                                       07A2h       48
+uart1TxData                                                       07D2h       48
+UartRxFunc                                                        0802h        4
+sDisplay                                                          0806h        4
+cnt_pressed_1                                                     080Ah        1
+cnt_pressed_2                                                     080Bh        1
+flag_long_pressed                                                 080Ch        1
+aux_flag                                                          080Dh        1
+uartRxBuffer                                                      080Eh       10
+comm_terminal_state                                               0818h        1
+sFrame_Rx                                                         0819h       37
+sProtocol                                                         083Eh        2
+send_group_S0120002000                                            0840h        1
+_seed                                                             0841h        4
 
 EEPROM Allocation
 Variable                                                          Address   Size

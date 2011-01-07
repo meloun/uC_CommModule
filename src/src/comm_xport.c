@@ -122,7 +122,7 @@ void CommXport_SendFrames(void){
             //1F values    
             CommXport_SendFrame( CMD_MM_GET_FREQUENCY,   (byte*)&pMessmodule->values.frequence,   2);  //FREQUENCE                
             CommXport_SendFrame( CMD_MM_GET_TEMPERATURE, (byte*)&pMessmodule->values.temperature, 2);  //RAWTEMP
-            break;
+            break;        
         case eVOLTAGES:
             //VOLTAGEs
             CommXport_SendFrame( CMD_MM_GET_VOLTAGE_1,  (byte*)&pMessmodule->values.voltage[0],  2);  //VOLTAGE 1
@@ -153,7 +153,7 @@ void CommXport_SendFrames(void){
             CommXport_SendFrame( CMD_MM_GET_PF_2,  (byte*)&pMessmodule->values.power_factor[1],  2);  //PF 2
             CommXport_SendFrame( CMD_MM_GET_PF_3,  (byte*)&pMessmodule->values.power_factor[2],  2);  //PF 3
             send_group = eIO;  
-            break;
+            break;         
     }                            
     
     //SYNCHRONIZATION END 

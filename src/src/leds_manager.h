@@ -1,19 +1,16 @@
 //*******************************************************************
-// test_process.h
+// leds_manager.h
 // (C)2010 Knuerr s.r.o, Ing. Lubos Melichar
 //*******************************************************************
 // 
 //*******************************************************************
-#ifndef BUTTONS_MANAGER_H_
-#define BUTTONS_MANAGER_H_
+#ifndef LEDS_MANAGER_H_
+#define LEDS_MANAGER_H_
 
 #include <types.h>
-#include <buttons.h>
 
-#define     CNT_SHORT_PRESS     2
-#define     CNT_LONG_PRESS      30
-
-void Buttons_manager();
+void Leds_Init(void);
+void Leds_Manager(void);
 
 
-#endif /* BUTTONS_MANAGER_H_ */
+#endif /* LEDS_MANAGER_H_ */

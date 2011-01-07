@@ -8,7 +8,7 @@
 #include <digital_outputs.h>
 #include <buttons.h>
 #include <uart2.h>
-#include <display.h>
+//#include <display.h>
 
 
 

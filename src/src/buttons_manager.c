@@ -6,7 +6,7 @@
 #include <hw_def.h>
 #include <stdio.h>
 #include <buttons.h>
-#include <display.h>
+#include <display_manager.h>
 #include <display_screens.h>
 #include <utils.h>
 #include "buttons_manager.h"
@@ -50,7 +50,7 @@ void Buttons_manager(){
     /* BUTTON TOP */
     if(GET_BUTTON_TOP_STATE == 0){
         cnt_pressed_1++; 
-        if(cnt_pressed_1 > CNT_LONG_PRESS){
+        if( cnt_pressed_1 > CNT_LONG_PRESS){
             printf("\nI:buttons: long press"); 
             cnt_pressed_1 = 0;  //vynulovani flagu pro nove zmacknuti
             flag_long_pressed = 1; // aby se po pusteni tlacitka nevykonal "short press"

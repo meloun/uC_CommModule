@@ -7,13 +7,20 @@
 #define DISPLAY_SCREENS_H_
 
 #include <types.h>
-#include <display.h>
+#include <display_manager.h>
 #include <NT7534.h>
 
-#define NR_SCREEN   8
+
+/* USER PARAMETERS */
+
+
+
+#define NR_SCREEN   10
+
+/* END OF USER PARAMETERS */
+
 
 #define TITLE_SIZE  15
-
 
 typedef byte ( *pDISPLAY_SCREEN_FUNCTION ) (byte *pTexts[NR_ROWS]);
 
