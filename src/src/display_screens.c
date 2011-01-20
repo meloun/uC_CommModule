@@ -55,7 +55,8 @@ tSCREEN_DATA sScreen_data;
 
 #define AUX_STRING_SIZE     40
 
-//title, underline
+// GET_HEADER
+// title, underline
 void getHeader(byte screen_index, byte* pTexts[NR_ROWS]){
     byte aux_string[AUX_STRING_SIZE];  
 
@@ -72,7 +73,8 @@ void getHeader(byte screen_index, byte* pTexts[NR_ROWS]){
                                
 }
 
-//clear unused rows, pagging
+// GET_FOOTER
+// clear unused rows, pagging
 void getFooter(byte first_unused_row, byte screen_index, byte* pTexts[NR_ROWS]){
     byte i;
     byte aux_string[AUX_STRING_SIZE];  
@@ -87,6 +89,7 @@ void getFooter(byte first_unused_row, byte screen_index, byte* pTexts[NR_ROWS]){
 
 }
 
+//SET_STRINGS
 //global function, set all strings
 void Display_screens_setStrings(byte screen_index, byte* pTexts[NR_ROWS]){
     byte nr_row;
@@ -105,7 +108,7 @@ void Display_screens_setStrings(byte screen_index, byte* pTexts[NR_ROWS]){
 // SCREEN FUNCTIONS
 //*******************************************
 
-//board
+// BOARD
 byte sf_board(byte* pTexts[NR_ROWS]){                         
     byte aux_string[AUX_STRING_SIZE];        
           
@@ -126,24 +129,16 @@ byte sf_board(byte* pTexts[NR_ROWS]){
     return NR_ROWS-1;              
 }
 
+// MODULES
 byte sf_modules(byte* pTexts[NR_ROWS]){                         
-    byte aux_string[AUX_STRING_SIZE];
-    //byte aux_string_selected_module[10]; 
+    byte aux_string[AUX_STRING_SIZE];    
     
     strncpyf(pTexts[2] ,"                     ", NR_COLUMNS);       
           
     sprintf(aux_string ,"    Available: %u      ", sMm.nr_available_modules);
     strncpy(pTexts[3], aux_string, NR_COLUMNS); 
 
-    strncpyf(pTexts[4] ,"                     ", NR_COLUMNS); 
-    
-    
-    //make string, selected module
-    /*if(sScreen_data.nr_selected_module)  
-        sprintf(aux_string_selected_module ,"M%u", sScreen_data.nr_selected_module);
-    else
-        sprintf(aux_string_selected_module ,"all", sScreen_data.nr_selected_module);
-    */
+    strncpyf(pTexts[4] ,"                     ", NR_COLUMNS);     
 
     //selected module            
     sprintf(aux_string ,"    Selected: M%u      ", sScreen_data.nr_selected_module+1);
@@ -152,16 +147,16 @@ byte sf_modules(byte* pTexts[NR_ROWS]){
     return NR_ROWS-2;              
 }
 
-//
+// RESUME
 byte sf_resume(byte* pTexts[NR_ROWS]){
     
     byte aux_string[AUX_STRING_SIZE];               
     tMESSMODULE *pModule = &sMm.sModule[sScreen_data.nr_selected_module];               
     
-    sprintf(aux_string ," U lines: %u         ", Messmodul_getCountVoltage());
+    sprintf(aux_string ," U lines: %u         ", Messmodul_getCountVoltage(sScreen_data.nr_selected_module));
     strncpy(pTexts[2], aux_string, NR_COLUMNS);
             
-    sprintf(aux_string ," I lines: %u         ", Messmodul_getCountCurrent());
+    sprintf(aux_string ," I lines: %u         ", Messmodul_getCountCurrent(sScreen_data.nr_selected_module));
     strncpy(pTexts[3], aux_string, NR_COLUMNS);        
                                                   
     strncpyf(pTexts[4] ,"                          ", NR_COLUMNS);

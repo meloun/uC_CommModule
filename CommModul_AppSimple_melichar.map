@@ -22,7 +22,7 @@ uartRxBuffer                                                      080Eh       10
 comm_terminal_state                                               0818h        1
 sFrame_Rx                                                         0819h       37
 sProtocol                                                         083Eh        2
-send_group_S0120002000                                            0840h        1
+send_group_S0110002000                                            0840h        1
 _seed                                                             0841h        4
 
 EEPROM Allocation
