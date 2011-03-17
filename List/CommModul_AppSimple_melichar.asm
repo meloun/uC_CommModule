@@ -2269,9 +2269,9 @@ _timer0_compa_isr:
 ; 0001 0061   void (*called_funcion)(void);
 ; 0001 0062 
 ; 0001 0063   // povolit vnorena preruseni
-; 0001 0064   /*#ifdef ENABLE_RECURSIVE_INTERRUPT
+; 0001 0064   #ifdef ENABLE_RECURSIVE_INTERRUPT
 ; 0001 0065     ENABLE_INTERRUPT
-; 0001 0066   #endif*/
+; 0001 0066   #endif
 ; 0001 0067 
 ; 0001 0068 
 ; 0001 0069 
@@ -5660,8 +5660,16 @@ _Messmodul_Manager:
 ; 000A 00F2     }
 ; 000A 00F3 
 ; 000A 00F4     //set CS
-; 000A 00F5     MESSMODULE_SELECT(sMm.nr_current_module)
+; 000A 00F5     MESSMODULE_DESELECT
 _0x14000D:
+	SBI  0x5,4
+	SBI  0x5,3
+	SBI  0x5,2
+	SBI  0x5,1
+	SBI  0x5,0
+	nop
+	nop
+; 000A 00F6     MESSMODULE_SELECT(sMm.nr_current_module)
 	__GETB1MN _sMm,853
 	CPI  R30,0
 	BRNE _0x140011
@@ -5683,24 +5691,17 @@ _0x140013:
 	CBI  0x5,0
 _0x140015:
 _0x140010:
-; 000A 00F6 
-; 000A 00F7     //receive, convert and store data from module
-; 000A 00F8     Messmodule_spi(sMm.nr_current_module);
+; 000A 00F7 
+; 000A 00F8     //receive, convert and store data from module
+; 000A 00F9     Messmodule_spi(sMm.nr_current_module);
 	__GETB1MN _sMm,853
 	ST   -Y,R30
 	RCALL _Messmodule_spi
-; 000A 00F9 
-; 000A 00FA     //clear CS
-; 000A 00FB     MESSMODULE_DESELECT
-	SBI  0x5,4
-	SBI  0x5,3
-	SBI  0x5,2
-	SBI  0x5,1
-	SBI  0x5,0
-	nop
-	nop
-; 000A 00FC 
-; 000A 00FD }
+; 000A 00FA 
+; 000A 00FB     //clear CS
+; 000A 00FC     //MESSMODULE_DESELECT
+; 000A 00FD 
+; 000A 00FE }
 	RET
 ;
 ;
@@ -5710,55 +5711,55 @@ _0x140010:
 ;// "while fuction", print debug messages
 ;/*******************************************/
 ;void Messmodul_Rest(){
-; 000A 0105 void Messmodul_Rest(){
-; 000A 0106 
-; 000A 0107     if(sMm.rest_flag){
-; 000A 0108         tMESSMODULE *pModule = &sMm.sModule[sMm.nr_current_module];
-; 000A 0109         //print values
-; 000A 010A         printf("\n============");
+; 000A 0106 void Messmodul_Rest(){
+; 000A 0107 
+; 000A 0108     if(sMm.rest_flag){
+; 000A 0109         tMESSMODULE *pModule = &sMm.sModule[sMm.nr_current_module];
+; 000A 010A         //print values
+; 000A 010B         printf("\n============");
 ;	*pModule -> Y+0
-; 000A 010B         printf("\nmessmodul nr.%u", sMm.nr_current_module+1);
-; 000A 010C         printf("\n============");
-; 000A 010D         //printf("\nfrequence: %u.%u Hz", pModule->values.frequence/1000, pModule->values.frequence%1000);
-; 000A 010E         printf("\ntemperature: %d.%d°C", pModule->values.temperature / 10, abs(pModule->values.temperature % 10));
-; 000A 010F 
-; 000A 0110         //printf("\ncurrent: %ld | %ld | %ld",  pModule->values.current[0], pModule->values.current[1], pModule->values.current[2]);
-; 000A 0111         //printf("\nvoltage: %ld | %ld | %ld",  pModule->values.voltage[0], pModule->values.voltage[1], pModule->values.voltage[2]);
-; 000A 0112         printf("\npf: %ld | %ld | %ld",  pModule->values.power_factor[0], pModule->values.power_factor[1], pModule->values.power_factor[2]);
-; 000A 0113 
-; 000A 0114         //printf("\nCC: volt:%d, amp:%d", pModule->values.volt_cc, pModule->values.amp_cc);
-; 000A 0115         //printf("\nPF: %d, %d, %d", pModule->values.pf[0], pModule->values.pf[1], pModule->values.pf[2]);
-; 000A 0116         //printf("\nPF: %ld, %ld, %ld", pModule->values.pf[0], pModule->values.pf[1], pModule->values.pf[2]);
-; 000A 0117         //printf("\nVRMS: 0x%lx, 0x%lx, 0x%lx", pModule->values.vrms[0], pModule->values.vrms[1], pModule->values.vrms[2]);
-; 000A 0118         //printf("\nIRMS: 0x%lx, 0x%lx, 0x%lx", pModule->values.irms[0], pModule->values.irms[1], pModule->values.irms[2]);
-; 000A 0119         //printf("\nACT: %ld, %ld, %ld", pModule->values.act[0], pModule->values.act[1], pModule->values.act[2]);
-; 000A 011A         //printf("\nACT: %x, %x, %x", pModule->values.act[0], pModule->values.act[1], pModule->values.act[2]);
-; 000A 011B         //printf("\nACT: %lx, %lx, %lx", pModule->values.act[0], pModule->values.act[1], pModule->values.act[2]);
-; 000A 011C         //printf("\nACT: %ld, %ld, %ld", pModule->values.act[0], pModule->values.act[1], pModule->values.act[2]);
-; 000A 011D         //printf("\nEAPOS: %lx, %lx, %lx", pModule->values.eapos[0], pModule->values.eapos[1], pModule->values.eapos[2]);
-; 000A 011E         //printf("\nEANEG: %lx, %lx, %lx", pModule->values.eaneg[0], pModule->values.eaneg[1], pModule->values.eaneg[2]);
-; 000A 011F         //printf("\nvoltage: %u, %u, %u", pModule->values.voltage[0], pModule->values.voltage[1], pModule->values.voltage[2]);
-; 000A 0120         //printf("\npwrp: 0x%ld, 0x%ld | 0x%ld,  0x%ld | 0x%ld,  0x%ld",  *(dword *)pModule->values.pwrp_x[0], *((dword *)pModule->values.pwrp_x[0]+1), *(dword *)pModule->values.pwrp_x[1], *((dword *)pModule->values.pwrp_x[1]+1), *(dword *)pModule->values.pwrp_x[2], *((dword *)pModule->values.pwrp_x[2]+1));
-; 000A 0121         //printf("\nvrms: %ld | %ld | %ld",  pModule->values.vrms[0],  pModule->values.vrms[1], pModule->values.vrms[2]);
-; 000A 0122         //printf("\nirms: %ld | %ld | %ld",  pModule->values.irms[0],  pModule->values.irms[1], pModule->values.irms[2]);
-; 000A 0123         //printf("\nvrms: %ld",  pModule->values.vrms[0]);
-; 000A 0124         //printf("\nv_x: %ld | %ld",  *(dword *)&(pModule->values.v_x[0][0]), *(dword *)&(pModule->values.v_x[0][4]));
-; 000A 0125         //printf("\nv_x: %x,%x,%x,%x,%x,%x,%x,%x", pModule->values.v_x[0][0], pModule->values.v_x[0][1], pModule->values.v_x[0][2], pModule->values.v_x[0][3], pModule->values.v_x[0][4], pModule->values.v_x[0][5], pModule->values.v_x[0][6], pModule->values.v_x[0][7]);
-; 000A 0126         //printf("\nv_x: %ld", buffer2signed(pModule->values.v_x[0],8));
-; 000A 0127         //printf("\ncurrent A: 0x%ld, 0x%ld | 0x%ld,  0x%lx | 0x%lx,  0x%lx", *(dword *)pModule->values.current[0], *((dword *)pModule->values.current[0]+1),*(dword *)pModule->values.current[1], *((dword *)pModule->values.current[1]+1),*(dword *)pModule->values.current[2], *((dword *)pModule->values.current[2]+1));
-; 000A 0128 
-; 000A 0129         sMm.rest_flag = 0;
-; 000A 012A     }
-; 000A 012B }
+; 000A 010C         printf("\nmessmodul nr.%u", sMm.nr_current_module+1);
+; 000A 010D         printf("\n============");
+; 000A 010E         //printf("\nfrequence: %u.%u Hz", pModule->values.frequence/1000, pModule->values.frequence%1000);
+; 000A 010F         printf("\ntemperature: %d.%d°C", pModule->values.temperature / 10, abs(pModule->values.temperature % 10));
+; 000A 0110 
+; 000A 0111         //printf("\ncurrent: %ld | %ld | %ld",  pModule->values.current[0], pModule->values.current[1], pModule->values.current[2]);
+; 000A 0112         //printf("\nvoltage: %ld | %ld | %ld",  pModule->values.voltage[0], pModule->values.voltage[1], pModule->values.voltage[2]);
+; 000A 0113         printf("\npf: %ld | %ld | %ld",  pModule->values.power_factor[0], pModule->values.power_factor[1], pModule->values.power_factor[2]);
+; 000A 0114 
+; 000A 0115         //printf("\nCC: volt:%d, amp:%d", pModule->values.volt_cc, pModule->values.amp_cc);
+; 000A 0116         //printf("\nPF: %d, %d, %d", pModule->values.pf[0], pModule->values.pf[1], pModule->values.pf[2]);
+; 000A 0117         //printf("\nPF: %ld, %ld, %ld", pModule->values.pf[0], pModule->values.pf[1], pModule->values.pf[2]);
+; 000A 0118         //printf("\nVRMS: 0x%lx, 0x%lx, 0x%lx", pModule->values.vrms[0], pModule->values.vrms[1], pModule->values.vrms[2]);
+; 000A 0119         //printf("\nIRMS: 0x%lx, 0x%lx, 0x%lx", pModule->values.irms[0], pModule->values.irms[1], pModule->values.irms[2]);
+; 000A 011A         //printf("\nACT: %ld, %ld, %ld", pModule->values.act[0], pModule->values.act[1], pModule->values.act[2]);
+; 000A 011B         //printf("\nACT: %x, %x, %x", pModule->values.act[0], pModule->values.act[1], pModule->values.act[2]);
+; 000A 011C         //printf("\nACT: %lx, %lx, %lx", pModule->values.act[0], pModule->values.act[1], pModule->values.act[2]);
+; 000A 011D         //printf("\nACT: %ld, %ld, %ld", pModule->values.act[0], pModule->values.act[1], pModule->values.act[2]);
+; 000A 011E         //printf("\nEAPOS: %lx, %lx, %lx", pModule->values.eapos[0], pModule->values.eapos[1], pModule->values.eapos[2]);
+; 000A 011F         //printf("\nEANEG: %lx, %lx, %lx", pModule->values.eaneg[0], pModule->values.eaneg[1], pModule->values.eaneg[2]);
+; 000A 0120         //printf("\nvoltage: %u, %u, %u", pModule->values.voltage[0], pModule->values.voltage[1], pModule->values.voltage[2]);
+; 000A 0121         //printf("\npwrp: 0x%ld, 0x%ld | 0x%ld,  0x%ld | 0x%ld,  0x%ld",  *(dword *)pModule->values.pwrp_x[0], *((dword *)pModule->values.pwrp_x[0]+1), *(dword *)pModule->values.pwrp_x[1], *((dword *)pModule->values.pwrp_x[1]+1), *(dword *)pModule->values.pwrp_x[2], *((dword *)pModule->values.pwrp_x[2]+1));
+; 000A 0122         //printf("\nvrms: %ld | %ld | %ld",  pModule->values.vrms[0],  pModule->values.vrms[1], pModule->values.vrms[2]);
+; 000A 0123         //printf("\nirms: %ld | %ld | %ld",  pModule->values.irms[0],  pModule->values.irms[1], pModule->values.irms[2]);
+; 000A 0124         //printf("\nvrms: %ld",  pModule->values.vrms[0]);
+; 000A 0125         //printf("\nv_x: %ld | %ld",  *(dword *)&(pModule->values.v_x[0][0]), *(dword *)&(pModule->values.v_x[0][4]));
+; 000A 0126         //printf("\nv_x: %x,%x,%x,%x,%x,%x,%x,%x", pModule->values.v_x[0][0], pModule->values.v_x[0][1], pModule->values.v_x[0][2], pModule->values.v_x[0][3], pModule->values.v_x[0][4], pModule->values.v_x[0][5], pModule->values.v_x[0][6], pModule->values.v_x[0][7]);
+; 000A 0127         //printf("\nv_x: %ld", buffer2signed(pModule->values.v_x[0],8));
+; 000A 0128         //printf("\ncurrent A: 0x%ld, 0x%ld | 0x%ld,  0x%lx | 0x%lx,  0x%lx", *(dword *)pModule->values.current[0], *((dword *)pModule->values.current[0]+1),*(dword *)pModule->values.current[1], *((dword *)pModule->values.current[1]+1),*(dword *)pModule->values.current[2], *((dword *)pModule->values.current[2]+1));
+; 000A 0129 
+; 000A 012A         sMm.rest_flag = 0;
+; 000A 012B     }
+; 000A 012C }
 ;
 ;//GET COUNT OF AVAILABLE MODULES
 ;byte Messmodul_countAvailable(){
-; 000A 012E byte Messmodul_countAvailable(){
+; 000A 012F byte Messmodul_countAvailable(){
 _Messmodul_countAvailable:
-; 000A 012F     byte i, aux_nr = 0;
-; 000A 0130 
-; 000A 0131     //check available modules
-; 000A 0132     for(i=0; i<NR_MESSMODULES;i++)      //over all modules
+; 000A 0130     byte i, aux_nr = 0;
+; 000A 0131 
+; 000A 0132     //check available modules
+; 000A 0133     for(i=0; i<NR_MESSMODULES;i++)      //over all modules
 	ST   -Y,R17
 	ST   -Y,R16
 ;	i -> R17
@@ -5768,7 +5769,7 @@ _Messmodul_countAvailable:
 _0x140018:
 	CPI  R17,4
 	BRSH _0x140019
-; 000A 0133         if(sMm.sModule[i].status != -1) //available? (variable status is managed in Messmodul_spi())
+; 000A 0134         if(sMm.sModule[i].status != -1) //available? (variable status is managed in Messmodul_spi())
 	LDI  R26,LOW(213)
 	MUL  R17,R26
 	MOVW R30,R0
@@ -5777,10 +5778,10 @@ _0x140018:
 	LD   R26,Z
 	CPI  R26,LOW(0xFF)
 	BREQ _0x14001A
-; 000A 0134             aux_nr++;
+; 000A 0135             aux_nr++;
 	SUBI R16,-1
-; 000A 0135 
-; 000A 0136     return aux_nr;
+; 000A 0136 
+; 000A 0137     return aux_nr;
 _0x14001A:
 	SUBI R17,-1
 	RJMP _0x140018
@@ -5790,16 +5791,16 @@ _0x20A000A:
 	LD   R16,Y+
 	LD   R17,Y+
 	RET
-; 000A 0137 }
+; 000A 0138 }
 ;
 ;//GET COUNT OF AVAILABLE VOLTAGES FOR MESSMODUL
 ;byte Messmodul_getCountVoltage(byte nr_messmodul){
-; 000A 013A byte Messmodul_getCountVoltage(byte nr_messmodul){
+; 000A 013B byte Messmodul_getCountVoltage(byte nr_messmodul){
 _Messmodul_getCountVoltage:
-; 000A 013B     byte i,aux_count = 0;
-; 000A 013C     tMESSMODULE *pModule = &sMm.sModule[nr_messmodul];
-; 000A 013D 
-; 000A 013E     for(i=0; i<3; i++)
+; 000A 013C     byte i,aux_count = 0;
+; 000A 013D     tMESSMODULE *pModule = &sMm.sModule[nr_messmodul];
+; 000A 013E 
+; 000A 013F     for(i=0; i<3; i++)
 	CALL SUBOPT_0x2F
 ;	nr_messmodul -> Y+4
 ;	i -> R17
@@ -5810,32 +5811,32 @@ _Messmodul_getCountVoltage:
 _0x14001C:
 	CPI  R17,3
 	BRSH _0x14001D
-; 000A 013F         if(pModule->values.voltage[i])
+; 000A 0140         if(pModule->values.voltage[i])
 	MOVW R26,R18
 	ADIW R26,5
 	MOV  R30,R17
 	CALL SUBOPT_0x18
 	SBIW R30,0
 	BREQ _0x14001E
-; 000A 0140             aux_count++;
+; 000A 0141             aux_count++;
 	SUBI R16,-1
-; 000A 0141 
-; 000A 0142     return aux_count;
+; 000A 0142 
+; 000A 0143     return aux_count;
 _0x14001E:
 	SUBI R17,-1
 	RJMP _0x14001C
 _0x14001D:
 	RJMP _0x20A0008
-; 000A 0143 }
+; 000A 0144 }
 ;
 ;//GET COUNT OF AVAILABLE CURRENTS FOR MESSMODUL
 ;byte Messmodul_getCountCurrent(byte nr_messmodul){
-; 000A 0146 byte Messmodul_getCountCurrent(byte nr_messmodul){
+; 000A 0147 byte Messmodul_getCountCurrent(byte nr_messmodul){
 _Messmodul_getCountCurrent:
-; 000A 0147     byte i,aux_count = 0;
-; 000A 0148     tMESSMODULE *pModule = &sMm.sModule[nr_messmodul];
-; 000A 0149 
-; 000A 014A     for(i=0; i<3; i++)
+; 000A 0148     byte i,aux_count = 0;
+; 000A 0149     tMESSMODULE *pModule = &sMm.sModule[nr_messmodul];
+; 000A 014A 
+; 000A 014B     for(i=0; i<3; i++)
 	CALL SUBOPT_0x2F
 ;	nr_messmodul -> Y+4
 ;	i -> R17
@@ -5846,17 +5847,17 @@ _Messmodul_getCountCurrent:
 _0x140020:
 	CPI  R17,3
 	BRSH _0x140021
-; 000A 014B         if(pModule->values.current[i])
+; 000A 014C         if(pModule->values.current[i])
 	MOVW R26,R18
 	ADIW R26,13
 	MOV  R30,R17
 	CALL SUBOPT_0x18
 	SBIW R30,0
 	BREQ _0x140022
-; 000A 014C             aux_count++;
+; 000A 014D             aux_count++;
 	SUBI R16,-1
-; 000A 014D 
-; 000A 014E     return aux_count;
+; 000A 014E 
+; 000A 014F     return aux_count;
 _0x140022:
 	SUBI R17,-1
 	RJMP _0x140020
@@ -5867,17 +5868,17 @@ _0x20A0008:
 _0x20A0009:
 	ADIW R28,5
 	RET
-; 000A 014F }
+; 000A 0150 }
 ;
 ;//bit 63 is the sign
 ;//otherwise 4 most significat bytes are zero
 ;signed long buffer2signed(byte *pBuffer, byte length){
-; 000A 0153 signed long buffer2signed(byte *pBuffer, byte length){
+; 000A 0154 signed long buffer2signed(byte *pBuffer, byte length){
 _buffer2signed:
-; 000A 0154 
-; 000A 0155      //most significant bit is the sign
-; 000A 0156      byte my_sign = *(pBuffer + (length-1)) & 0x80 ? 1 : 0;
-; 000A 0157      return  (signed long)(my_sign ? -*(unsigned long *)pBuffer : *(unsigned long *)pBuffer);
+; 000A 0155 
+; 000A 0156      //most significant bit is the sign
+; 000A 0157      byte my_sign = *(pBuffer + (length-1)) & 0x80 ? 1 : 0;
+; 000A 0158      return  (signed long)(my_sign ? -*(unsigned long *)pBuffer : *(unsigned long *)pBuffer);
 	ST   -Y,R17
 ;	*pBuffer -> Y+2
 ;	length -> Y+1
@@ -5912,7 +5913,7 @@ _0x140026:
 _0x140027:
 	LDD  R17,Y+0
 	JMP  _0x20A0004
-; 000A 0158 }
+; 000A 0159 }
 ;//**********************************************************************************************
 ;// display.c
 ;// (C)2010 Knuerr s.r.o, Ing. Lubos Melichar
