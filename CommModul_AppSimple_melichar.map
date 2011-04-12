@@ -18,12 +18,13 @@ cnt_pressed_1                                                     080Ah        1
 cnt_pressed_2                                                     080Bh        1
 flag_long_pressed                                                 080Ch        1
 aux_flag                                                          080Dh        1
-uartRxBuffer                                                      080Eh       10
-comm_terminal_state                                               0818h        1
-sFrame_Rx                                                         0819h       37
-sProtocol                                                         083Eh        2
-send_group_S0110002000                                            0840h        1
-_seed                                                             0841h        4
+sTS                                                               080Eh       11
+aux_flag                                                          0819h        1
+uartRxBuffer                                                      081Ah       10
+comm_terminal_state                                               0824h        1
+sFrame_Rx                                                         0825h       37
+sProtocol                                                         084Ah        2
+_seed                                                             084Ch        4
 
 EEPROM Allocation
 Variable                                                          Address   Size

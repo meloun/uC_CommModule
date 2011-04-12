@@ -135,10 +135,13 @@ byte sf_modules(byte* pTexts[NR_ROWS]){
     
     strncpyf(pTexts[2] ,"                     ", NR_COLUMNS);       
           
-    sprintf(aux_string ,"    Available: %u      ", sMm.nr_available_modules);
-    strncpy(pTexts[3], aux_string, NR_COLUMNS); 
+    sprintf(aux_string ,"    Available: %u      ", sMm.nr_available_modules);            
+    strncpy(pTexts[3], aux_string, NR_COLUMNS);                          
+    
 
-    strncpyf(pTexts[4] ,"                     ", NR_COLUMNS);     
+    //strncpyf(pTexts[4] ,"                     ", NR_COLUMNS);
+    sprintf(aux_string ,"    (%d,%d,%d,%d)      ", sMm.sModule[0].status, sMm.sModule[1].status, sMm.sModule[2].status, sMm.sModule[3].status);
+    strncpy(pTexts[4], aux_string, NR_COLUMNS);     
 
     //selected module            
     sprintf(aux_string ,"    Selected: M%u      ", sScreen_data.nr_selected_module+1);

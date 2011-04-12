@@ -21,7 +21,7 @@
       
       // 100 - 
       // 110 - prohozene ledky a tlacitka  
-      #define   HW_VERSION                        110         // !!relevantni pro podm.preklad!!
+      #define   HW_VERSION                        100         // !!relevantni pro podm.preklad!!
       
       //sw
       #define   SW_NAME                           "TestHw"         // Verze hardwaru 1.00
