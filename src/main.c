@@ -20,7 +20,6 @@ Data Stack size         : 256
 #include <messmodules.h>     //read and save all usefulldata from MAXIM to the structure
 #include <display_manager.h> //users screeen in display_screens.c
 #include "leds_manager.h"
-#include "thermal_shock_manager.h"
 #include "buttons_manager.h"
 #include "comm_terminal.h"
 #include "comm_xport.h"
@@ -31,13 +30,12 @@ void main(void){
 
   /* HW Inits */
   HW_init();
-  Leds_Init();
-  ThermalShock_Manager_Init();
+  Leds_Init();  
   Buttons_init();
       
   /* SW Inits */
   //uart                                                         
-  //CommTerminal_Init(); //init ports, registers, baudrate, RX handler  
+   CommTerminal_Init(); //init ports, registers, baudrate, RX handler  
   //CommXport_Init(); //init ports, registers, baudrate, RX handler
   
   //spi
@@ -59,11 +57,10 @@ void main(void){
   //******************************************
 
   //Create_Process( 3000, CommXport_Manager);  // zpracovava buffer naplneny v preruseni
-  //Create_Process( 500,  Messmodul_Manager);  // read and save data from MAXIM         
+  Create_Process( 1000,  Messmodul_Manager);  // read and save data from MAXIM         
   Create_Process(  30,  Buttons_manager);    // obsluha tlacitek          
-  //Create_Process( 500,  Display_Manager);  // obsluha dipleje
-  Create_Process( 1000, Leds_Manager);       // obsluha led  
-  Create_Process( 1000, ThermalShock_Manager);    // obsluha vystupu
+  Create_Process( 500,  Display_Manager);  // obsluha dipleje
+  Create_Process( 1000, Leds_Manager);       // obsluha led    
   //Create_Process( 100, CommTerminal_Manager); //zpracovava buffer naplneny prijmutymi znaky
   
   //delay before uart output  

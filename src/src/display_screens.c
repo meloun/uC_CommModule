@@ -139,8 +139,9 @@ byte sf_modules(byte* pTexts[NR_ROWS]){
     strncpy(pTexts[3], aux_string, NR_COLUMNS);                          
     
 
-    //strncpyf(pTexts[4] ,"                     ", NR_COLUMNS);
-    sprintf(aux_string ,"    (%d,%d,%d,%d)      ", sMm.sModule[0].status, sMm.sModule[1].status, sMm.sModule[2].status, sMm.sModule[3].status);
+    //strncpyf(pTexts[4] ,"                     ", NR_COLUMNS);      
+    
+    sprintf(aux_string ,"    (%d,%d,%d,%d)      ", (NR_MESSMODULES>0) ? sMm.sModule[0].status : -1, (NR_MESSMODULES>1) ? sMm.sModule[1].status : -1, (NR_MESSMODULES>2) ? sMm.sModule[2].status : -1, (NR_MESSMODULES>3) ? sMm.sModule[3].status : -1);
     strncpy(pTexts[4], aux_string, NR_COLUMNS);     
 
     //selected module            
